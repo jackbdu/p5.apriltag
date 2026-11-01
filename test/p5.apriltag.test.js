@@ -349,6 +349,8 @@ test("manual and lifecycle removal terminate workers", () => {
 test("sample tags match the pinned official AprilTag images", () => {
   const samples = [
     ["tag36_11_00000.png", 10, "48d811f770fc3595aaf5650a5fd8007843e7fece1f8fdcb94e0f113b4c9ed0c6"],
+    ["tag25_09_00000.png", 9, "e83c7e911a9fa3bda232fd7176be5b080ef2b64d01724184b0ce50e17250ad1a"],
+    ["tag16_05_00000.png", 8, "04dd4f53a6dbe78cd2c7bcb946711dfe428e6e5ea195cbb669c823d671c15872"],
     ["tag41_12_00000.png", 9, "ad5bc161c157634f05afcfd3cfba34334b9303609dd3afc9c000b86e031da02a"],
     ["tag52_13_00000.png", 10, "9358900c0f4512e3c8abd5bfae93e30234194c7c24f2cc9c90c2e64316a8829d"],
     ["tag21_07_00000.png", 9, "6aa5400c41d31447ee5db7212df3a772170c2037c21b1eccbb9bd7c607c3c8f5"],
