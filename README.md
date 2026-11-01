@@ -65,8 +65,7 @@ Creates a `p5.AprilTagDetector` for a video returned by `createCapture()`.
 | --- | --- | --- |
 | `width`, `height` | video size | Detection resolution |
 | `detectionsPerSecond` | uncapped | Optional maximum detection rate |
-| `family` | — | One family to detect instead of all supported families |
-| `families` | all supported | Family array to detect; overrides `family` |
+| `families` | all supported | Tag families to detect |
 | `hammingDistance` | `0` | Correctable bits, from `0` to `3` |
 | `maxDetections` | `100` | Maximum results per frame |
 | `quadDecimate` | `2` | Image decimation used by the detector |
@@ -78,8 +77,8 @@ Creates a `p5.AprilTagDetector` for a video returned by `createCapture()`.
 | `onError(error)` | — | Called when loading or detection fails |
 | `loaderUrl`, `wasmUrl` | pinned defaults | URLs for a compatible runtime build |
 
-The detector checks all supported tag families by default. Set `family` or
-`families` to limit detection to a known subset and improve performance.
+The detector checks all supported tag families by default. Set `families` to
+limit detection to a known subset and improve performance.
 
 By default, detection is scheduled whenever `detect()` is called and the
 worker is idle. If detection is still in progress, the request is skipped and
@@ -97,15 +96,7 @@ Supported families:
 - `tagStandard41h12`
 - `tagStandard52h13`
 
-Select one family:
-
-```js
-detector = createAprilTagDetector(video, {
-  family: "tagStandard41h12",
-});
-```
-
-Select several families:
+Select one or several families:
 
 ```js
 detector = createAprilTagDetector(video, {

@@ -152,7 +152,7 @@ test("does not rate-limit detection by default", () => {
 test("configures one or several supported tag families", () => {
   const harness = loadAddon();
   const singleDetector = harness.fn.createAprilTagDetector.call({}, makeVideo(), {
-    family: "tag25h9",
+    families: ["tag25h9"],
   });
   const detector = harness.fn.createAprilTagDetector.call({}, makeVideo(), {
     families: ["tagStandard41h12", "tagCircle49h12", "tagStandard41h12"],
@@ -176,7 +176,8 @@ test("rejects unsupported family and detector options", () => {
   const harness = loadAddon();
   const create = (options) => harness.fn.createAprilTagDetector.call({}, makeVideo(), options);
 
-  assert.throws(() => create({ family: "tagUnknown" }), /Unsupported AprilTag family/);
+  assert.throws(() => create({ families: ["tagUnknown"] }), /Unsupported AprilTag family/);
+  assert.throws(() => create({ families: "tag25h9" }), /non-empty array/);
   assert.throws(() => create({ families: [] }), /non-empty array/);
   assert.throws(() => create({ hammingDistance: 4 }), /integer from 0 through 3/);
   assert.throws(() => create({ maxDetections: 0 }), /positive integer/);
