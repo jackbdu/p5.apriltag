@@ -46,17 +46,20 @@ These instructions apply to this addon and all files below this directory.
 - Before choosing a version, inspect existing Git tags and confirm the proposed
   `v<version>` tag is unused. Never move or reuse a published tag; issue a new
   patch version instead.
-- For every release, update `package.json` to the release version and update the
-  README installation URL to the exact matching tag, such as `@v0.1.0`, rather
-  than the mutable `@main` branch. Keep public API documentation and examples
-  synchronized with the released behavior.
+- For every release, update `package.json` to the exact release version. Keep
+  the README installation URL on the major-version alias, such as `@v0`, rather
+  than a minor or patch version that needs frequent documentation updates, or
+  the unrestricted `@main` branch. Update the README alias only for a major
+  release. Keep public API documentation and examples synchronized with the
+  released behavior.
 - Run the full `npm run check`, `git diff --check`, and the dependency URL checks
   above when applicable. Review the release diff and ensure unrelated work is
   not included.
 - Commit all release changes before tagging. Create an annotated tag named
   `v<package version>` on that release commit with a message such as
   `Release v0.1.0`; verify the tag points to the release commit and that its
-  `package.json` version and README URL match.
+  `package.json` version matches. Verify the README URL uses the corresponding
+  major-version alias.
 - A commit or release-preparation request does not by itself authorize pushing
   or publishing. When the user requests a release push, push both the release
   commit and its exact tag, using explicit commands or `--follow-tags`.

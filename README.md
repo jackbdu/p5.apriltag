@@ -17,7 +17,7 @@ Custom families and layouts can be created with
 After loading p5.js, add the p5.apriltag addon to your HTML file:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/jackbdu/p5.apriltag@main/lib/p5.apriltag.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jackbdu/p5.apriltag@v0/lib/p5.apriltag.js"></script>
 ```
 
 The addon and its WebAssembly runtime require an internet connection.
