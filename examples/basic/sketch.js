@@ -6,7 +6,18 @@ function setup() {
   video = createCapture(VIDEO);
   video.size(640, 480);
   video.hide();
-  aprilTag = createAprilTagDetector(video, { family: "tag36h11" });
+  aprilTag = createAprilTagDetector(video, {
+    families: [
+      "tag36h11",
+      "tag25h9",
+      "tag16h5",
+      "tagCircle21h7",
+      "tagCircle49h12",
+      "tagCustom48h12",
+      "tagStandard41h12",
+      "tagStandard52h13",
+    ],
+  });
 }
 
 function draw() {
