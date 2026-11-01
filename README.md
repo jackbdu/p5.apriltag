@@ -59,7 +59,7 @@ Creates a `p5.AprilTagDetector` for a video returned by `createCapture()`.
 | Option | Default | Description |
 | --- | --- | --- |
 | `width`, `height` | video size | Detection resolution |
-| `detectionsPerSecond` | `12` | Maximum detection rate |
+| `detectionsPerSecond` | uncapped | Optional maximum detection rate |
 | `family` | `"tag36h11"` | Tag family to detect |
 | `families` | — | Array of families to detect; overrides `family` |
 | `hammingDistance` | `0` | Correctable bits, from `0` to `3` |
@@ -72,6 +72,11 @@ Creates a `p5.AprilTagDetector` for a video returned by `createCapture()`.
 | `onReady(detector)` | — | Called when the detector is ready |
 | `onError(error)` | — | Called when loading or detection fails |
 | `loaderUrl`, `wasmUrl` | pinned defaults | URLs for a compatible runtime build |
+
+By default, detection is scheduled whenever `detect()` is called and the
+worker is idle. If detection is still in progress, the request is skipped and
+the latest completed results are returned. Set `detectionsPerSecond` only when
+you want an additional fixed rate limit.
 
 Supported families:
 

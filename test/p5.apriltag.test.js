@@ -133,6 +133,13 @@ test("factory binds the sketch and creates a configured worker", () => {
   assert.equal(detector.hammingDistance, 0);
 });
 
+test("does not rate-limit detection by default", () => {
+  const harness = loadAddon();
+  const detector = harness.fn.createAprilTagDetector.call({}, makeVideo());
+
+  assert.equal(detector.interval, 0);
+});
+
 test("configures one or several supported tag families", () => {
   const harness = loadAddon();
   const detector = harness.fn.createAprilTagDetector.call({}, makeVideo(), {
