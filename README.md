@@ -2,20 +2,25 @@
 
 AprilTag detection for p5.js 2.x, with global and instance mode support.
 
-## Load from jsDelivr
+## Live demos
 
-Load p5.js first, followed by the addon and your sketch:
+- [Camera detection example](https://jackbdu.github.io/p5.apriltag/examples/basic/)
+- [Sample markers](https://jackbdu.github.io/p5.apriltag/examples/tags/)
 
-```html
-<script src="https://cdn.jsdelivr.net/npm/p5@2.3.4/lib/p5.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/jackbdu/p5.apriltag@main/lib/p5.apriltag.js"></script>
-<script src="sketch.js"></script>
-```
-
-For a deployed sketch, replace `@main` with a release tag such as `@v0.1.0`.
-The addon and its WebAssembly runtime require an internet connection.
+Additional markers are available from the official
+[AprilTag image collection](https://github.com/AprilRobotics/apriltag-imgs).
+Custom families and layouts can be created with
+[AprilTag generation](https://github.com/AprilRobotics/apriltag-generation).
 
 ## Quick start
+
+After loading p5.js, add the p5.apriltag addon to your HTML file:
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/jackbdu/p5.apriltag@main/lib/p5.apriltag.js"></script>
+```
+
+The addon and its WebAssembly runtime require an internet connection.
 
 ```js
 let video;
@@ -135,16 +140,6 @@ new p5((p) => {
   };
 });
 ```
-
-## Live demos
-
-- [Camera detection example](https://jackbdu.github.io/p5.apriltag/examples/basic/)
-- [Sample markers](https://jackbdu.github.io/p5.apriltag/examples/tags/)
-
-Additional markers are available from the official
-[AprilTag image collection](https://github.com/AprilRobotics/apriltag-imgs).
-Custom families and layouts can be created with
-[AprilTag generation](https://github.com/AprilRobotics/apriltag-generation).
 
 ## Tests
 
