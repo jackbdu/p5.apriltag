@@ -14,7 +14,12 @@ Custom families and layouts can be created with
 
 ## Quick start
 
-After loading p5.js, add the p5.apriltag addon to your HTML file:
+To try the addon, open the
+[camera detection example in the p5.js Web Editor](https://editor.p5js.org/jackbdu/sketches/migJmdT3t).
+
+To use the addon, duplicate the sample sketch in the p5.js Web Editor, or
+follow the steps below to add it to your own sketch. First, load p5.js and then
+add p5.apriltag to your HTML file:
 
 ```html
 <script src="https://cdn.jsdelivr.net/gh/jackbdu/p5.apriltag@v0/lib/p5.apriltag.js"></script>
@@ -60,8 +65,8 @@ Creates a `p5.AprilTagDetector` for a video returned by `createCapture()`.
 | --- | --- | --- |
 | `width`, `height` | video size | Detection resolution |
 | `detectionsPerSecond` | uncapped | Optional maximum detection rate |
-| `family` | `"tag36h11"` | Tag family to detect |
-| `families` | — | Array of families to detect; overrides `family` |
+| `family` | — | One family to detect instead of all supported families |
+| `families` | all supported | Family array to detect; overrides `family` |
 | `hammingDistance` | `0` | Correctable bits, from `0` to `3` |
 | `maxDetections` | `100` | Maximum results per frame |
 | `quadDecimate` | `2` | Image decimation used by the detector |
@@ -72,6 +77,9 @@ Creates a `p5.AprilTagDetector` for a video returned by `createCapture()`.
 | `onReady(detector)` | — | Called when the detector is ready |
 | `onError(error)` | — | Called when loading or detection fails |
 | `loaderUrl`, `wasmUrl` | pinned defaults | URLs for a compatible runtime build |
+
+The detector checks all supported tag families by default. Set `family` or
+`families` to limit detection to a known subset and improve performance.
 
 By default, detection is scheduled whenever `detect()` is called and the
 worker is idle. If detection is still in progress, the request is skipped and

@@ -129,7 +129,16 @@ test("factory binds the sketch and creates a configured worker", () => {
   assert.equal(detector.interval, 50);
   assert.equal(harness.workers.length, 1);
   assert.match(harness.workers[0].url, /^blob:test-/);
-  assert.deepEqual(Array.from(detector.families), ["tag36h11"]);
+  assert.deepEqual(Array.from(detector.families), [
+    "tag36h11",
+    "tag25h9",
+    "tag16h5",
+    "tagCircle21h7",
+    "tagCircle49h12",
+    "tagCustom48h12",
+    "tagStandard41h12",
+    "tagStandard52h13",
+  ]);
   assert.equal(detector.hammingDistance, 0);
 });
 
@@ -142,13 +151,17 @@ test("does not rate-limit detection by default", () => {
 
 test("configures one or several supported tag families", () => {
   const harness = loadAddon();
+  const singleDetector = harness.fn.createAprilTagDetector.call({}, makeVideo(), {
+    family: "tag25h9",
+  });
   const detector = harness.fn.createAprilTagDetector.call({}, makeVideo(), {
     families: ["tagStandard41h12", "tagCircle49h12", "tagStandard41h12"],
     hammingDistance: 1,
     quadDecimate: 1,
   });
-  const workerSource = harness.blobs[0].parts.join("");
+  const workerSource = harness.blobs[1].parts.join("");
 
+  assert.deepEqual(Array.from(singleDetector.families), ["tag25h9"]);
   assert.deepEqual(Array.from(detector.families), [
     "tagStandard41h12",
     "tagCircle49h12",
