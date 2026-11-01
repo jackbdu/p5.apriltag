@@ -38,6 +38,36 @@ These instructions apply to this addon and all files below this directory.
 - When dependency URLs change, verify both hosted files return successfully,
   permit cross-origin loading, and are pinned to an immutable revision.
 
+## Versioning and releases
+
+- Use semantic versioning: patch for compatible fixes, minor for compatible
+  features, and major for breaking API changes. Do not bump the version for
+  ordinary unreleased work; perform the bump as part of preparing a release.
+- Before choosing a version, inspect existing Git tags and confirm the proposed
+  `v<version>` tag is unused. Never move or reuse a published tag; issue a new
+  patch version instead.
+- For every release, update `package.json` to the release version and update the
+  README installation URL to the exact matching tag, such as `@v0.1.0`, rather
+  than the mutable `@main` branch. Keep public API documentation and examples
+  synchronized with the released behavior.
+- Run the full `npm run check`, `git diff --check`, and the dependency URL checks
+  above when applicable. Review the release diff and ensure unrelated work is
+  not included.
+- Commit all release changes before tagging. Create an annotated tag named
+  `v<package version>` on that release commit with a message such as
+  `Release v0.1.0`; verify the tag points to the release commit and that its
+  `package.json` version and README URL match.
+- A commit or release-preparation request does not by itself authorize pushing
+  or publishing. When the user requests a release push, push both the release
+  commit and its exact tag, using explicit commands or `--follow-tags`.
+- After pushing, verify the remote tag exists and the exact jsDelivr `/gh/` URL
+  for the tagged addon returns successfully with cross-origin loading allowed.
+  Treat the release as incomplete until these checks pass or a propagation
+  delay is reported to the user.
+- npm publication is not part of the release process while `package.json`
+  contains `"private": true`; GitHub tags provide the versions consumed by the
+  jsDelivr `/gh/` URL.
+
 ## Attribution
 
 Keep the Acknowledgements section in `README.md` accurate. Preserve attribution
