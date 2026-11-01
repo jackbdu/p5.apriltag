@@ -7,7 +7,18 @@ new p5((p) => {
     video = p.createCapture(p.VIDEO);
     video.size(640, 480);
     video.hide();
-    aprilTag = p.createAprilTagDetector(video);
+    aprilTag = p.createAprilTagDetector(video, {
+      families: [
+        "tag36h11",
+        "tag25h9",
+        "tag16h5",
+        "tagCircle21h7",
+        "tagCircle49h12",
+        "tagCustom48h12",
+        "tagStandard41h12",
+        "tagStandard52h13",
+      ],
+    });
   };
 
   p.draw = () => {
