@@ -20,6 +20,8 @@ These instructions apply to this addon and all files below this directory.
   under `examples/`.
 - Examples should use ordinary p5 structure and minimally styled or unstyled
   HTML unless a specific example requires presentation styling.
+- When adding or renaming an example, update any corresponding live-demo link
+  in `README.md` and include every example sketch in the syntax-check command.
 
 ## Public API
 
