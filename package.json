@@ -1,0 +1,10 @@
+{
+  "name": "p5.apriltag",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check lib/p5.apriltag.js && node --check examples/basic/sketch.js && node --test"
+  }
+}
