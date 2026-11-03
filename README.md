@@ -77,7 +77,6 @@ Creates a `p5.AprilTagDetector` for a video returned by `createCapture()`.
 | `quadSigma` | `0` | Gaussian blur applied before detection |
 | `refineEdges` | `true` | Refine detected tag edges |
 | `decodeSharpening` | `0.25` | Decode sharpening amount |
-| `debug` | `false` | Enable detector debugging |
 | `onReady(detector)` | — | Called when the detector is ready |
 | `onError(error)` | — | Called when loading or detection fails |
 | `loaderUrl`, `wasmUrl` | pinned defaults | URLs for a compatible runtime build |

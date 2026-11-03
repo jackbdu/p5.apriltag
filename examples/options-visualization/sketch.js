@@ -88,7 +88,6 @@ function rebuildDetector() {
     quadSigma: Number(data.get("quadSigma")),
     refineEdges: data.has("refineEdges"),
     decodeSharpening: Number(data.get("decodeSharpening")),
-    debug: data.has("debug"),
   };
   if (data.has("limitRate")) {
     options.detectionsPerSecond = Number(data.get("detectionsPerSecond"));

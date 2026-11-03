@@ -170,6 +170,7 @@ test("configures one or several supported tag families", () => {
   assert.match(workerSource, /AliAlimohamad\/apriltag-js@4359086c/);
   assert.match(workerSource, /"families":\["tagStandard41h12","tagCircle49h12"\]/);
   assert.match(workerSource, /"quadDecimate":1/);
+  assert.doesNotMatch(workerSource, /"debug"/);
 });
 
 test("rejects unsupported family and detector options", () => {
@@ -184,7 +185,7 @@ test("rejects unsupported family and detector options", () => {
   assert.throws(() => create({ width: 0 }), /width and height must be positive integers/);
   assert.throws(() => create({ detectionsPerSecond: 0 }), /must be a positive number/);
   assert.throws(() => create({ quadDecimate: 0 }), /must be a positive number/);
-  assert.throws(() => create({ refineEdges: 1 }), /must be boolean values/);
+  assert.throws(() => create({ refineEdges: 1 }), /must be a boolean value/);
   assert.throws(() => create({ onReady: true }), /must be functions/);
 });
 
