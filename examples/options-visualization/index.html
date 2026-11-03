@@ -26,9 +26,6 @@
       .option { display: grid; grid-template-columns: 1.2rem minmax(0, 1fr); gap: 0.15rem 0.25rem; margin-bottom: 0.5rem; align-items: start; }
       .option label { grid-column: 2; margin: 0; }
       .option small { grid-column: 2; margin: 0; }
-      .option-status { margin-left: 0.5rem; color: #b42318; font-size: 0.85em; font-weight: 700; }
-      .status-success { color: #16803a; }
-      .status-warning, .status-error { color: #b42318; }
       #families > label { margin-left: 1.45rem; }
       .help {
         grid-column: 1;
@@ -49,8 +46,7 @@
       }
       input[type="url"] { width: 100%; }
       .section-title { margin: 0 0 0.5rem; }
-      .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem; }
-      .actions button { padding: 0.7rem; font: inherit; font-weight: 700; }
+      .reset-button { margin-bottom: 1rem; padding: 0.7rem; font: inherit; font-weight: 700; }
       pre { white-space: pre-wrap; overflow-wrap: anywhere; }
       canvas {
         display: block;
@@ -70,8 +66,7 @@
       <section id="canvas-container"></section>
       <aside>
         <h2 class="section-title">Detector options</h2>
-        <small>Choose settings, then select Apply options to rebuild the detector.</small>
-        <p id="options-status" aria-live="polite" hidden><strong></strong></p>
+        <small>Changes apply automatically.</small>
         <form id="detector-options">
           <fieldset aria-labelledby="processing-heading">
             <div class="section-heading"><strong id="processing-heading">Processing</strong></div>
@@ -144,14 +139,8 @@
             </div>
           </fieldset>
 
-          <div class="actions">
-            <button type="submit">Apply options</button>
-            <button type="reset">Reset defaults</button>
-          </div>
+          <button class="reset-button" type="reset">Reset defaults</button>
         </form>
-
-        <h3>Currently applied detector options</h3>
-        <pre id="applied-options">None</pre>
 
         <h2 class="section-title">Visualization</h2>
         <form id="visualization-options">
