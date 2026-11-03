@@ -4,7 +4,6 @@ AprilTag detection for p5.js 2.x, with global and instance mode support.
 
 ## Live demos
 
-- [Basic camera detection example](https://jackbdu.github.io/p5.apriltag/examples/basic-global/)
 - [Options and visualization example](https://jackbdu.github.io/p5.apriltag/examples/options-visualization/)
 - [Sample markers](https://jackbdu.github.io/p5.apriltag/examples/tags/)
 
@@ -15,12 +14,17 @@ Custom families and layouts can be created with
 
 ## Quick start
 
-To try the addon, open the
-[camera detection example in the p5.js Web Editor](https://editor.p5js.org/jackbdu/sketches/migJmdT3t).
+Choose a starting point:
 
-To use the addon, duplicate the sample sketch in the p5.js Web Editor, or
-follow the steps below to add it to your own sketch. First, load p5.js and then
-add p5.apriltag to your HTML file:
+- [p5.js Web Editor example](https://editor.p5js.org/jackbdu/sketches/migJmdT3t)
+  for the quickest way to try the addon or duplicate it into your account.
+- [Global-mode starter template](examples/starter-global/)
+  for sketches that call p5 functions directly.
+- [Instance-mode starter template](examples/starter-instance/)
+  for sketches that call p5 functions through a sketch instance such as `p`.
+
+To add the addon to another sketch, load p5.js and then add p5.apriltag to your
+HTML file:
 
 ```html
 <script src="https://cdn.jsdelivr.net/gh/jackbdu/p5.apriltag@v0/lib/p5.apriltag.js"></script>
