@@ -26,6 +26,9 @@
       .option { display: grid; grid-template-columns: 1.2rem minmax(0, 1fr); gap: 0.15rem 0.25rem; margin-bottom: 0.5rem; align-items: start; }
       .option label { grid-column: 2; margin: 0; }
       .option small { grid-column: 2; margin: 0; }
+      .option-status { margin-left: 0.5rem; color: #b42318; font-size: 0.85em; font-weight: 700; }
+      .status-success { color: #16803a; }
+      .status-warning, .status-error { color: #b42318; }
       #families > label { margin-left: 1.45rem; }
       .help {
         grid-column: 1;
@@ -68,6 +71,7 @@
       <aside>
         <h2 class="section-title">Detector options</h2>
         <small>Choose settings, then select Apply options to rebuild the detector.</small>
+        <p id="options-status" aria-live="polite" hidden><strong></strong></p>
         <form id="detector-options">
           <fieldset aria-labelledby="processing-heading">
             <div class="section-heading"><strong id="processing-heading">Processing</strong></div>
@@ -145,6 +149,9 @@
             <button type="reset">Reset defaults</button>
           </div>
         </form>
+
+        <h3>Currently applied detector options</h3>
+        <pre id="applied-options">None</pre>
 
         <h2 class="section-title">Visualization</h2>
         <form id="visualization-options">

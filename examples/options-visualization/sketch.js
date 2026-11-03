@@ -15,6 +15,7 @@ let video;
 let detector;
 let detectorOptions;
 let detectorMessage = "Loading detector…";
+let appliedFormState;
 
 function setup() {
   const canvas = createCanvas(VIDEO_WIDTH, VIDEO_HEIGHT);
@@ -24,8 +25,11 @@ function setup() {
   video.hide();
 
   createFamilyControls();
-  document.querySelector("#detector-options").addEventListener("submit", applyOptions);
-  document.querySelector("#detector-options").addEventListener("reset", () => {
+  createOptionStatuses();
+  const detectorForm = document.querySelector("#detector-options");
+  detectorForm.addEventListener("submit", applyOptions);
+  detectorForm.addEventListener("input", markOptionsChanged);
+  detectorForm.addEventListener("reset", () => {
     setTimeout(() => {
       syncAllFamiliesToggle();
       syncRangeOutputs();
@@ -89,6 +93,7 @@ function rebuildDetector() {
   const families = data.getAll("families");
   if (families.length === 0) {
     detectorMessage = "Select at least one tag family.";
+    setOptionsStatus("Changes not applied: select at least one tag family.");
     return;
   }
 
@@ -111,21 +116,32 @@ function rebuildDetector() {
   if (data.get("wasmUrl")) options.wasmUrl = data.get("wasmUrl");
 
   try {
-    detector?.remove();
-    detectorOptions = options;
-    detectorMessage = "Loading detector…";
-    detector = createAprilTagDetector(video, {
+    const nextDetector = createAprilTagDetector(video, {
       ...options,
       onReady: () => {
         detectorMessage = "Ready";
+        const changed = updateOptionStatuses();
+        setOptionsStatus(
+          changed ? "Changes not applied." : "Options applied.",
+          changed ? "warning" : "success",
+        );
       },
       onError: (error) => {
         detectorMessage = error.message;
+        setOptionsStatus(`Detector error: ${error.message}`, "error");
       },
     });
+    detector?.remove();
+    detector = nextDetector;
+    detectorOptions = options;
+    detectorMessage = "Loading detector…";
+    appliedFormState = readDetectorFormState();
+    showAppliedOptions();
+    updateOptionStatuses();
+    setOptionsStatus("Options applied; detector loading…", "success");
   } catch (error) {
-    detector = undefined;
-    detectorMessage = error.message;
+    updateOptionStatuses();
+    setOptionsStatus(`Changes not applied: ${error.message}`, "error");
   }
 }
 
@@ -215,7 +231,6 @@ function updateOutputs(detections) {
     families: detector.families,
     hammingDistance: detector.hammingDistance,
     detectionCount: detections.length,
-    appliedOptions: detectorOptions,
   };
   document.querySelector("#detector-state").textContent = JSON.stringify(state, null, 2);
   document.querySelector("#detection-output").textContent = JSON.stringify(detections, null, 2);
@@ -233,4 +248,69 @@ function syncRangeOutputs() {
     const slider = document.querySelector(`#${output.getAttribute("for")}`);
     output.value = slider.value;
   }
+}
+
+function markOptionsChanged() {
+  const changed = updateOptionStatuses();
+  setOptionsStatus(
+    changed ? "Changes not applied." : "Options applied.",
+    changed ? "warning" : "success",
+  );
+}
+
+function setOptionsStatus(message, type = "warning") {
+  const status = document.querySelector("#options-status");
+  status.hidden = false;
+  status.className = `status-${type}`;
+  status.querySelector("strong").textContent = message;
+}
+
+function showAppliedOptions() {
+  document.querySelector("#applied-options").textContent = detectorOptions
+    ? JSON.stringify(detectorOptions, null, 2)
+    : "None";
+}
+
+function createOptionStatuses() {
+  for (const option of document.querySelectorAll("#detector-options .option")) {
+    const status = document.createElement("span");
+    status.className = "option-status";
+    const label = option.querySelector("label");
+    label.append(" ", status);
+  }
+}
+
+function readDetectorFormState() {
+  const state = {};
+  const controls = document.querySelectorAll(
+    "#detector-options input, #detector-options select",
+  );
+  for (const control of controls) {
+    const key = control.name === "families"
+      ? `families:${control.value}`
+      : control.id || control.name;
+    state[key] = control.type === "checkbox" ? control.checked : control.value;
+  }
+  return state;
+}
+
+function updateOptionStatuses() {
+  const current = readDetectorFormState();
+  let anyChanged = !appliedFormState;
+  for (const option of document.querySelectorAll("#detector-options .option")) {
+    const controls = option.closest("#families")
+      ? document.querySelectorAll("#families input")
+      : option.querySelectorAll("input, select");
+    const changed = !appliedFormState || [...controls].some((control) => {
+      const key = control.name === "families"
+        ? `families:${control.value}`
+        : control.id || control.name;
+      return current[key] !== appliedFormState[key];
+    });
+    anyChanged ||= changed;
+    option.querySelector(".option-status").textContent = changed
+      ? "Changes not applied"
+      : "";
+  }
+  return anyChanged;
 }
