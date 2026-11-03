@@ -20,9 +20,28 @@
       aside { width: 100%; max-width: 30rem; max-height: 100%; overflow: auto; }
       fieldset { min-width: 0; margin: 0 0 0.75rem; }
       label { display: block; margin: 0.25rem 0; overflow-wrap: anywhere; }
-      input[type="number"], input[type="url"] {
+      small { display: block; margin: 0.15rem 0 0.5rem; }
+      [hidden] { display: none !important; }
+      .section-heading { margin-bottom: 0.5rem; }
+      .option { display: grid; grid-template-columns: 1.2rem minmax(0, 1fr); gap: 0.15rem 0.25rem; margin-bottom: 0.5rem; align-items: start; }
+      .option label { grid-column: 2; margin: 0; }
+      .option small { grid-column: 2; margin: 0; }
+      #families > label { margin-left: 1.45rem; }
+      .help {
+        grid-column: 1;
+        grid-row: 1;
+        width: 1.2rem;
+        height: 1.2rem;
+        padding: 0;
+        border: 1px solid;
+        border-radius: 50%;
+        background: none;
+        text-align: center;
+        cursor: pointer;
+      }
+      input[type="range"] { width: min(16rem, 100%); }
+      input[type="url"], select {
         box-sizing: border-box;
-        width: 9rem;
         max-width: 100%;
       }
       input[type="url"] { width: 100%; }
@@ -48,30 +67,77 @@
       <section id="canvas-container"></section>
       <aside>
         <h2 class="section-title">Detector options</h2>
+        <small>Choose settings, then select Apply options to rebuild the detector.</small>
         <form id="detector-options">
-          <fieldset>
-            <legend>Processing</legend>
-            <label>Width <input name="width" type="number" min="1" step="1" value="640" /></label>
-            <label>Height <input name="height" type="number" min="1" step="1" value="480" /></label>
-            <label><input name="limitRate" type="checkbox" /> Limit detections per second</label>
-            <label>Detections per second <input name="detectionsPerSecond" type="number" min="0.1" step="0.1" value="30" /></label>
-            <label>Hamming distance <input name="hammingDistance" type="number" min="0" max="3" step="1" value="0" /></label>
-            <label>Maximum detections <input name="maxDetections" type="number" min="1" step="1" value="100" /></label>
-            <label>Quad decimate <input name="quadDecimate" type="number" min="0.1" step="0.1" value="2" /></label>
-            <label>Quad sigma <input name="quadSigma" type="number" step="0.1" value="0" /></label>
-            <label>Decode sharpening <input name="decodeSharpening" type="number" step="0.05" value="0.25" /></label>
-            <label><input name="refineEdges" type="checkbox" checked /> Refine edges</label>
+          <fieldset aria-labelledby="processing-heading">
+            <div class="section-heading"><strong id="processing-heading">Processing</strong></div>
+
+            <div class="option">
+              <button class="help" type="button" aria-controls="help-resolution" aria-expanded="false">?</button>
+              <label>Detection resolution <select name="resolution"><option value="320x240">320 × 240 — faster</option><option value="640x480" selected>640 × 480 — balanced</option><option value="1280x960">1280 × 960 — more detail</option></select></label>
+              <small id="help-resolution" hidden>Changes the detector input, not the displayed video. Lower resolutions are faster; higher resolutions retain more small-tag detail.</small>
+            </div>
+            <div class="option">
+              <button class="help" type="button" aria-controls="help-rate-limit" aria-expanded="false">?</button>
+              <label><input name="limitRate" type="checkbox" /> Limit detections per second</label>
+              <small id="help-rate-limit" hidden>Leave this off to detect whenever the worker is ready, or enable it to reduce CPU use.</small>
+            </div>
+            <div class="option">
+              <button class="help" type="button" aria-controls="help-rate" aria-expanded="false">?</button>
+              <label>Rate limit <input id="detection-rate" name="detectionsPerSecond" type="range" min="1" max="60" step="1" value="30" /> <output for="detection-rate">30</output> per second</label>
+              <small id="help-rate" hidden>Sets the maximum detection rate when the rate limit is enabled.</small>
+            </div>
+            <div class="option">
+              <button class="help" type="button" aria-controls="help-hamming" aria-expanded="false">?</button>
+              <label>Hamming distance <select name="hammingDistance"><option value="0" selected>0 — exact matches</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></label>
+              <small id="help-hamming" hidden>Allows correction of bit errors. Higher values may recover damaged tags but can increase false matches.</small>
+            </div>
+            <div class="option">
+              <button class="help" type="button" aria-controls="help-maximum" aria-expanded="false">?</button>
+              <label>Maximum detections <select name="maxDetections"><option value="1">1</option><option value="2">2</option><option value="5">5</option><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100" selected>100</option></select></label>
+              <small id="help-maximum" hidden>Caps the tags returned from one frame and determines the worker's result-buffer size.</small>
+            </div>
+            <div class="option">
+              <button class="help" type="button" aria-controls="help-decimate" aria-expanded="false">?</button>
+              <label>Quad decimate <input id="quad-decimate" name="quadDecimate" type="range" min="1" max="4" step="0.25" value="2" /> <output for="quad-decimate">2</output></label>
+              <small id="help-decimate" hidden>Higher values find candidates faster but lose small-tag detail.</small>
+            </div>
+            <div class="option">
+              <button class="help" type="button" aria-controls="help-sigma" aria-expanded="false">?</button>
+              <label>Quad sigma <input id="quad-sigma" name="quadSigma" type="range" min="0" max="2" step="0.1" value="0" /> <output for="quad-sigma">0</output></label>
+              <small id="help-sigma" hidden>Blurs the candidate image. Zero disables blur; a small amount can reduce noise.</small>
+            </div>
+            <div class="option">
+              <button class="help" type="button" aria-controls="help-sharpening" aria-expanded="false">?</button>
+              <label>Decode sharpening <input id="decode-sharpening" name="decodeSharpening" type="range" min="0" max="1" step="0.05" value="0.25" /> <output for="decode-sharpening">0.25</output></label>
+              <small id="help-sharpening" hidden>Sharpens the sampled tag bits before decoding.</small>
+            </div>
+            <div class="option">
+              <button class="help" type="button" aria-controls="help-refine" aria-expanded="false">?</button>
+              <label><input name="refineEdges" type="checkbox" checked /> Refine edges</label>
+              <small id="help-refine" hidden>Improves corner placement after a candidate is found, with a small processing cost.</small>
+            </div>
           </fieldset>
 
-          <fieldset id="families">
-            <legend>Families</legend>
-            <label><input id="all-families" type="checkbox" checked /> Toggle all families</label>
+          <fieldset id="families" aria-labelledby="families-heading">
+            <div class="section-heading"><strong id="families-heading">Families</strong></div>
+            <div class="option">
+              <button class="help" type="button" aria-controls="help-families" aria-expanded="false">?</button>
+              <label><input id="all-families" type="checkbox" checked /> Toggle all families</label>
+              <small id="help-families" hidden>Select only the families you need to reduce detector work. At least one family is required.</small>
+            </div>
           </fieldset>
 
-          <fieldset>
-            <legend>Runtime overrides (leave blank for pinned defaults)</legend>
-            <label>Loader URL <input name="loaderUrl" type="url" /></label>
-            <label>WASM URL <input name="wasmUrl" type="url" /></label>
+          <fieldset aria-labelledby="runtime-heading">
+            <div class="section-heading"><strong id="runtime-heading">Runtime overrides</strong></div>
+            <div class="option">
+              <button class="help" type="button" aria-controls="help-runtime" aria-expanded="false">?</button>
+              <div>
+                <label>Loader URL <input name="loaderUrl" type="url" /></label>
+                <label>WASM URL <input name="wasmUrl" type="url" /></label>
+              </div>
+              <small id="help-runtime" hidden>Advanced: leave both fields blank for the pinned defaults. Override both only when testing a compatible runtime build.</small>
+            </div>
           </fieldset>
 
           <div class="actions">
@@ -82,14 +148,14 @@
 
         <h2 class="section-title">Visualization</h2>
         <form id="visualization-options">
-          <fieldset>
-            <legend>Overlays</legend>
-            <label><input name="outline" type="checkbox" checked /> Outline</label>
-            <label><input name="corners" type="checkbox" checked /> Numbered corners</label>
-            <label><input name="center" type="checkbox" checked /> Center</label>
-            <label><input name="rotation" type="checkbox" checked /> Rotation axis</label>
-            <label><input name="label" type="checkbox" checked /> ID and family label</label>
-            <label><input name="details" type="checkbox" checked /> All numeric outputs</label>
+          <fieldset aria-labelledby="overlays-heading">
+            <div class="section-heading"><strong id="overlays-heading">Overlays</strong></div>
+            <div class="option"><button class="help" type="button" aria-controls="help-outline" aria-expanded="false">?</button><label><input name="outline" type="checkbox" checked /> Outline</label><small id="help-outline" hidden>Draws the detected tag boundary.</small></div>
+            <div class="option"><button class="help" type="button" aria-controls="help-corners" aria-expanded="false">?</button><label><input name="corners" type="checkbox" checked /> Numbered corners</label><small id="help-corners" hidden>Marks the four canonically ordered corner points.</small></div>
+            <div class="option"><button class="help" type="button" aria-controls="help-center" aria-expanded="false">?</button><label><input name="center" type="checkbox" checked /> Center</label><small id="help-center" hidden>Marks the reported center of the tag.</small></div>
+            <div class="option"><button class="help" type="button" aria-controls="help-rotation" aria-expanded="false">?</button><label><input name="rotation" type="checkbox" checked /> Rotation axis</label><small id="help-rotation" hidden>Draws the image-plane rotation direction from the tag center.</small></div>
+            <div class="option"><button class="help" type="button" aria-controls="help-label" aria-expanded="false">?</button><label><input name="label" type="checkbox" checked /> ID and family label</label><small id="help-label" hidden>Displays the decoded tag family and ID.</small></div>
+            <div class="option"><button class="help" type="button" aria-controls="help-details" aria-expanded="false">?</button><label><input name="details" type="checkbox" checked /> All numeric outputs</label><small id="help-details" hidden>Displays family ID, Hamming value, decision margin, rotation, and center coordinates.</small></div>
           </fieldset>
         </form>
 

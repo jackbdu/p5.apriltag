@@ -28,6 +28,7 @@ function setup() {
   document.querySelector("#detector-options").addEventListener("reset", () => {
     setTimeout(() => {
       syncAllFamiliesToggle();
+      syncRangeOutputs();
       rebuildDetector();
     });
   });
@@ -36,6 +37,19 @@ function setup() {
       checkbox.checked = event.target.checked;
     }
   });
+  for (const slider of document.querySelectorAll("input[type='range']")) {
+    slider.addEventListener("input", syncRangeOutputs);
+  }
+  for (const button of document.querySelectorAll("button.help")) {
+    button.setAttribute("aria-label", "Toggle explanation");
+    button.addEventListener("click", () => {
+      const explanation = document.querySelector(`#${button.getAttribute("aria-controls")}`);
+      const expanded = button.getAttribute("aria-expanded") === "true";
+      button.setAttribute("aria-expanded", String(!expanded));
+      explanation.hidden = expanded;
+    });
+  }
+  syncRangeOutputs();
   rebuildDetector();
 }
 
@@ -78,9 +92,10 @@ function rebuildDetector() {
     return;
   }
 
+  const [width, height] = data.get("resolution").split("x").map(Number);
   const options = {
-    width: Number(data.get("width")),
-    height: Number(data.get("height")),
+    width,
+    height,
     families,
     hammingDistance: Number(data.get("hammingDistance")),
     maxDetections: Number(data.get("maxDetections")),
@@ -211,4 +226,11 @@ function syncAllFamiliesToggle() {
   const all = document.querySelector("#all-families");
   all.checked = familyBoxes.every((checkbox) => checkbox.checked);
   all.indeterminate = !all.checked && familyBoxes.some((checkbox) => checkbox.checked);
+}
+
+function syncRangeOutputs() {
+  for (const output of document.querySelectorAll("output[for]")) {
+    const slider = document.querySelector(`#${output.getAttribute("for")}`);
+    output.value = slider.value;
+  }
 }
