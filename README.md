@@ -155,7 +155,7 @@ npm test
 npm run check
 ```
 
-### AI Disclosure
+## AI Disclosure
 
 This project, including its source code and documentation, was generated entirely using generative AI under human direction. The author defined the project's objectives, guided development, and tested its functionality. However, the AI-generated code has not undergone a comprehensive manual review.
 
