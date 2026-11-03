@@ -114,7 +114,9 @@ Each detection contains:
 - `corners`
 - `decisionMargin`
 - `hamming`
-- `rotation`
+- `rotation`: image-plane rotation in radians from `-PI` to `PI`, suitable for
+  p5.js `rotate()`; positive values turn clockwise because image Y increases
+  downward
 
 Detector properties include `detections`, `families`, `hammingDistance`,
 `processingTime`, `ready`, `busy`, and `error`.

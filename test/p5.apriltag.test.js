@@ -250,6 +250,63 @@ test("generated worker initializes the selected families and detector parameters
   assert.equal(messages.at(-1).type, "ready");
 });
 
+test("worker derives p5-compatible rotation from canonically ordered corners", async () => {
+  const harness = loadAddon();
+  harness.fn.createAprilTagDetector.call({}, makeVideo());
+  const values = new Map([
+    [100, 7],
+    [104, 0],
+    [108, 20],
+    [112, 20],
+    [116, 30], [120, 10],
+    [124, 30], [128, 30],
+    [132, 10], [136, 30],
+    [140, 10], [144, 10],
+    [148, 50],
+    [152, 0],
+    [156, -2.4],
+  ]);
+  const messages = [];
+  let allocations = 0;
+  const module = {
+    HEAPU8: new Uint8Array(1024),
+    _free() {},
+    _malloc() {
+      allocations += 1;
+      return allocations === 1 ? 100 : 800;
+    },
+    cwrap(name) {
+      if (name === "detect_tags") return () => 1;
+      return () => 0;
+    },
+    getValue(offset) {
+      return values.get(offset) ?? 0;
+    },
+  };
+  const workerContext = {
+    AprilTagWasm: async () => module,
+    Math,
+    Uint8Array,
+    importScripts() {},
+    performance: { now: () => 10 },
+    postMessage(message) {
+      messages.push(message);
+    },
+  };
+
+  vm.runInNewContext(harness.blobs[0].parts.join(""), workerContext);
+  await new Promise((resolve) => setImmediate(resolve));
+  workerContext.onmessage({
+    data: { type: "detect", gray: new Uint8Array([0]), width: 1, height: 1 },
+  });
+
+  const detection = messages.at(-1).value[0];
+  assert.equal(detection.id, 7);
+  assert.equal(detection.rotation, Math.PI / 2);
+  assert.notEqual(detection.rotation, values.get(156));
+  assert.ok(detection.rotation >= -Math.PI && detection.rotation <= Math.PI);
+});
+
 test("rejects values that are not p5 media elements", () => {
   const harness = loadAddon();
 
