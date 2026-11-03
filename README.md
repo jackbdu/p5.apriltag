@@ -5,6 +5,7 @@ AprilTag detection for p5.js 2.x, with global and instance mode support.
 ## Live demos
 
 - [Camera detection example](https://jackbdu.github.io/p5.apriltag/examples/basic-global/)
+- [Options and visualization example](https://jackbdu.github.io/p5.apriltag/examples/options-visualization/)
 - [Sample markers](https://jackbdu.github.io/p5.apriltag/examples/tags/)
 
 Additional markers are available from the official

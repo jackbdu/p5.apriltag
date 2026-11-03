@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>p5.apriltag options and visualization example</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 1rem; overflow: hidden; }
+      h1 { margin: 0 0 0.75rem; }
+      main {
+        display: grid;
+        grid-template-columns: minmax(0, 4fr) minmax(0, 3fr);
+        gap: 1rem;
+        width: 100%;
+        max-width: 1136px;
+        height: calc(100vh - 4.5rem);
+        align-items: start;
+      }
+      #canvas-container, aside { min-width: 0; }
+      aside { width: 100%; max-width: 30rem; max-height: 100%; overflow: auto; }
+      fieldset { min-width: 0; margin: 0 0 0.75rem; }
+      label { display: block; margin: 0.25rem 0; overflow-wrap: anywhere; }
+      input[type="number"], input[type="url"] {
+        box-sizing: border-box;
+        width: 9rem;
+        max-width: 100%;
+      }
+      input[type="url"] { width: 100%; }
+      .section-title { margin: 0 0 0.5rem; }
+      .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem; }
+      .actions button { padding: 0.7rem; font: inherit; font-weight: 700; }
+      pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+      canvas {
+        display: block;
+        width: 100% !important;
+        max-width: 640px;
+        height: auto !important;
+        aspect-ratio: 4 / 3;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/p5@2.3.4/lib/p5.min.js"></script>
+    <script src="../../lib/p5.apriltag.js"></script>
+    <script src="sketch.js"></script>
+  </head>
+  <body>
+    <h1>AprilTag options and outputs</h1>
+    <main>
+      <section id="canvas-container"></section>
+      <aside>
+        <h2 class="section-title">Detector options</h2>
+        <form id="detector-options">
+          <fieldset>
+            <legend>Processing</legend>
+            <label>Width <input name="width" type="number" min="1" step="1" value="640" /></label>
+            <label>Height <input name="height" type="number" min="1" step="1" value="480" /></label>
+            <label><input name="limitRate" type="checkbox" /> Limit detections per second</label>
+            <label>Detections per second <input name="detectionsPerSecond" type="number" min="0.1" step="0.1" value="30" /></label>
+            <label>Hamming distance <input name="hammingDistance" type="number" min="0" max="3" step="1" value="0" /></label>
+            <label>Maximum detections <input name="maxDetections" type="number" min="1" step="1" value="100" /></label>
+            <label>Quad decimate <input name="quadDecimate" type="number" min="0.1" step="0.1" value="2" /></label>
+            <label>Quad sigma <input name="quadSigma" type="number" step="0.1" value="0" /></label>
+            <label>Decode sharpening <input name="decodeSharpening" type="number" step="0.05" value="0.25" /></label>
+            <label><input name="refineEdges" type="checkbox" checked /> Refine edges</label>
+            <label><input name="debug" type="checkbox" /> Upstream detector debug mode</label>
+          </fieldset>
+
+          <fieldset id="families">
+            <legend>Families</legend>
+            <label><input id="all-families" type="checkbox" checked /> Toggle all families</label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Runtime overrides (leave blank for pinned defaults)</legend>
+            <label>Loader URL <input name="loaderUrl" type="url" /></label>
+            <label>WASM URL <input name="wasmUrl" type="url" /></label>
+          </fieldset>
+
+          <div class="actions">
+            <button type="submit">Apply options</button>
+            <button type="reset">Reset defaults</button>
+          </div>
+        </form>
+
+        <h2 class="section-title">Visualization</h2>
+        <form id="visualization-options">
+          <fieldset>
+            <legend>Overlays</legend>
+            <label><input name="outline" type="checkbox" checked /> Outline</label>
+            <label><input name="corners" type="checkbox" checked /> Numbered corners</label>
+            <label><input name="center" type="checkbox" checked /> Center</label>
+            <label><input name="rotation" type="checkbox" checked /> Rotation axis</label>
+            <label><input name="label" type="checkbox" checked /> ID and family label</label>
+            <label><input name="details" type="checkbox" checked /> All numeric outputs</label>
+          </fieldset>
+        </form>
+
+        <h2>Detector state</h2>
+        <pre id="detector-state">Waiting for camera…</pre>
+        <h2>Detection objects</h2>
+        <pre id="detection-output">[]</pre>
+      </aside>
+    </main>
+  </body>
+</html>
