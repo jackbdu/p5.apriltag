@@ -4,7 +4,7 @@ AprilTag detection for p5.js 2.x, with global and instance mode support.
 
 ## Live demos
 
-- [Camera detection example](https://jackbdu.github.io/p5.apriltag/examples/basic-global/)
+- [Basic camera detection example](https://jackbdu.github.io/p5.apriltag/examples/basic-global/)
 - [Options and visualization example](https://jackbdu.github.io/p5.apriltag/examples/options-visualization/)
 - [Sample markers](https://jackbdu.github.io/p5.apriltag/examples/tags/)
 
@@ -154,6 +154,12 @@ new p5((p) => {
 npm test
 npm run check
 ```
+
+### AI Disclosure
+
+This project, including its source code and documentation, was generated entirely using generative AI under human direction. The author defined the project's objectives, guided development, and tested its functionality. However, the AI-generated code has not undergone a comprehensive manual review.
+
+The project is provided as-is, and users are encouraged to review and test the code before incorporating it into their own projects.
 
 ## Acknowledgements
 
